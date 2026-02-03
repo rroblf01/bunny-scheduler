@@ -5,7 +5,9 @@ from django import forms
 class ReservationForm(forms.ModelForm):
     date = forms.DateField(
         label="Día",
-        widget=forms.DateInput(attrs={"type": "date", "class": "form-input"}),
+        widget=forms.DateInput(
+            attrs={"type": "date", "class": "form-input", "readonly": "readonly"}
+        ),
     )
     start_hour = forms.TimeField(
         label="Hora de inicio",

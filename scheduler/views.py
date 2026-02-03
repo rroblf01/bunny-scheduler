@@ -47,16 +47,29 @@ class ReservationView(LoginRequiredMixin, FormView):
             initial["date"] = date_param
         return initial
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        date_val = self.request.GET.get("date")
+        if date_val:
+            reservas = Reservation.objects.filter(start_time__date=date_val).order_by(
+                "start_time"
+            )
+            context["reserved_hours"] = reservas
+        else:
+            context["reserved_hours"] = []
+        return context
+
     def form_valid(self, form):
         from datetime import datetime
 
         date_val = form.cleaned_data["date"]
         start_hour = form.cleaned_data["start_hour"]
         end_hour = form.cleaned_data["end_hour"]
-        # Combinar fecha y hora
+
         start_dt = datetime.combine(date_val, start_hour)
         end_dt = datetime.combine(date_val, end_hour)
-        # Verificar solapamiento
+
         overlap = Reservation.objects.filter(
             start_time__lt=end_dt, end_time__gt=start_dt
         ).exists()
