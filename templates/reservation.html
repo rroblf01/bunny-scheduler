@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Reservar día | Bunny Scheduler{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded shadow mt-8">
+    <h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Reservar día</h2>
+    {% if messages %}
+    <ul class="mb-4">
+        {% for message in messages %}
+        <li class="text-{{ message.tags }}-600">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded">Reservar</button>
+    </form>
+    <a href="/" class="block text-center mt-4 text-purple-600 hover:underline">Volver al calendario</a>
+</div>
+{% endblock %}

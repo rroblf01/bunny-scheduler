@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Mis Reservas | Bunny Scheduler{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded shadow mt-8">
+    <h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Mis Reservas</h2>
+    <div class="flex flex-col md:flex-row md:items-center md:space-x-4 mb-6">
+        <div class="mb-2 md:mb-0">
+            <label for="filter-date-from" class="block text-sm font-medium text-gray-700">Desde</label>
+            <input type="date" id="filter-date-from" class="form-input border rounded px-2 py-1" />
+        </div>
+        <div>
+            <label for="filter-date-to" class="block text-sm font-medium text-gray-700">Hasta</label>
+            <input type="date" id="filter-date-to" class="form-input border rounded px-2 py-1" />
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200" id="reservations-table">
+            <thead>
+                <tr>
+                    <th class="p-2 border">Fecha</th>
+                    <th class="p-2 border">Hora inicio</th>
+                    <th class="p-2 border">Hora fin</th>
+                    <th class="p-2 border">Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reservations %}
+                <tr data-date="{{ r.start_time|date:" Y-m-d" }}">
+                    <td class="p-2 border">{{ r.start_time|date:"Y-m-d" }}</td>
+                    <td class="p-2 border">{{ r.start_time|time:"H:i" }}</td>
+                    <td class="p-2 border">{{ r.end_time|time:"H:i" }}</td>
+                    <td class="p-2 border">{{ r.description }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="p-2 border text-center text-gray-500">No tienes reservas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="/" class="block text-center mt-4 text-purple-600 hover:underline">Volver al calendario</a>
+</div>
+<script>
+    const fromInput = document.getElementById('filter-date-from');
+    const toInput = document.getElementById('filter-date-to');
+    const rows = document.querySelectorAll('#reservations-table tbody tr[data-date]');
+
+    function filterRows() {
+        const from = fromInput.value;
+        const to = toInput.value;
+        rows.forEach(row => {
+            const date = row.getAttribute('data-date');
+            let show = true;
+            if (from && date < from) show = false;
+            if (to && date > to) show = false;
+            row.style.display = show ? '' : 'none';
+        });
+    }
+    fromInput.addEventListener('change', filterRows);
+    toInput.addEventListener('change', filterRows);
+</script>
+{% endblock %}

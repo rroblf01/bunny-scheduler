@@ -47,7 +47,7 @@
                     html += `<td class='p-2 border text-gray-400'>${nextMonthDay++}</td>`;
                 } else {
                     let highlight = (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) ? 'bg-purple-100 font-bold' : '';
-                    html += `<td class='p-2 border ${highlight}'>${day++}</td>`;
+                    html += `<td class='p-2 border ${highlight} cursor-pointer hover:bg-purple-200' data-date='${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}'>${day++}</td>`;
                 }
             }
             html += `</tr>`;
@@ -55,6 +55,13 @@
         }
         html += `</tbody>`;
         document.getElementById("calendarTable").innerHTML = html;
+        // Añadir evento click a los días válidos
+        document.querySelectorAll('#calendarTable td[data-date]').forEach(td => {
+            td.addEventListener('click', function () {
+                const date = this.getAttribute('data-date');
+                window.location.href = `/reservation/?date=${date}`;
+            });
+        });
     }
 
     document.getElementById("prevMonth").onclick = function () {

@@ -12,6 +12,7 @@
     <nav class="bg-white shadow p-4 mb-8">
         <div class="container mx-auto flex justify-between items-center">
             <a href="/" class="text-xl font-bold text-purple-700">Bunny Scheduler</a>
+            <a href="/reservations/" class="text-purple-600 hover:underline mr-4">Mis Reservas</a>
             {% if user.is_authenticated %}
             <span class="text-gray-700">Hola, {{ user.username }}!</span>
             <form action="/logout/" method="post" class="ml-4">
