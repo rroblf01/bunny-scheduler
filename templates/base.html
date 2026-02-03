@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bunny Scheduler{% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-white shadow p-4 mb-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-xl font-bold text-purple-700">Bunny Scheduler</a>
+            {% if user.is_authenticated %}
+            <span class="text-gray-700">Hola, {{ user.username }}!</span>
+            <form action="/logout/" method="post" class="ml-4">
+                {% csrf_token %}
+                <button type="submit"
+                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">Cerrar
+                    sesión</button>
+            </form>
+            {% endif %}
+        </div>
+    </nav>
+    <main class="flex-1 container mx-auto px-4">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>
