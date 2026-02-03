@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load proposal_extras %}
+
 {% block title %}Reservar día | Bunny Scheduler{% endblock %}
 {% block content %}
 <div class="flex flex-col md:flex-row gap-8 justify-center mt-8">
@@ -27,6 +29,23 @@
             <li class="bg-purple-100 text-purple-800 rounded px-3 py-1 text-sm">
                 {{ r.start_time|time:"H:i" }} - {{ r.end_time|time:"H:i" }}
                 <span class="block text-gray-500">{{ r.description }}</span>
+                {% if r.user != request.user %}
+                {% with user_proposal=r.proposal_set.all|get_user_proposal:request.user %}
+                {% if not user_proposal %}
+                <form method="post" action="{% url 'proposal' %}" class="mt-2 flex flex-col gap-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="reservation_id" value="{{ r.id }}">
+                    <input type="text" name="motivation" placeholder="Motivo" required
+                        class="form-input px-2 py-1 rounded border">
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">Proponer</button>
+                </form>
+                {% else %}
+                <span class="block mt-2 text-green-600 text-xs">Propuesta enviada, estado: {{ user_proposal.status}}
+                </span>
+                {% endif %}
+                {% endwith %}
+                {% endif %}
             </li>
             {% endfor %}
         </ul>

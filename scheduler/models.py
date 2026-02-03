@@ -20,5 +20,8 @@ class Proposal(models.Model):
     ]
     reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
     proponent = models.ForeignKey(User, on_delete=models.CASCADE)
+    original_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="original_user_proposals"
+    )
     motivation = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS)

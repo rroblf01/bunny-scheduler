@@ -1,4 +1,11 @@
-from .views import HomeView, LoginView, RegisterView, ReservationView, ReservationsView
+from .views import (
+    HomeView,
+    LoginView,
+    RegisterView,
+    ReservationView,
+    ReservationsView,
+    ProposalView,
+)
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
@@ -9,4 +16,5 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
     path("reservation/", ReservationView.as_view(), name="reservation"),
     path("reservations/", ReservationsView.as_view(), name="reservations"),
+    path("proposal/", ProposalView.as_view(), name="proposal"),
 ]
