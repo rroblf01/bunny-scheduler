@@ -1,0 +1,81 @@
+<h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Calendario</h2>
+<div class="flex justify-between items-center mb-4">
+    <button id="prevMonth" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">&#8592;</button>
+    <span id="calendarTitle" class="text-lg font-semibold"></span>
+    <button id="nextMonth" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">&#8594;</button>
+</div>
+<div class="overflow-x-auto">
+    <table id="calendarTable" class="min-w-full border border-gray-200"></table>
+</div>
+
+<script>
+    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    function renderCalendar(month, year) {
+        const calendarTitle = document.getElementById("calendarTitle");
+        calendarTitle.textContent = `${monthNames[month]} ${year}`;
+
+        const firstDay = new Date(year, month, 1);
+        // Lunes = 0, Domingo = 6 (ajustar para que lunes sea el primer día)
+        let startDay = (firstDay.getDay() + 6) % 7;
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+        let html = `<thead><tr>`;
+        ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].forEach(d => {
+            html += `<th class='p-2 border'>${d}</th>`;
+        });
+        html += `</tr></thead><tbody>`;
+
+        let day = 1;
+        let nextMonthDay = 1;
+        for (let i = 0; i < 6; i++) {
+            html += `<tr>`;
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < startDay) {
+                    html += `<td class='p-2 border text-gray-400'>${daysInPrevMonth - startDay + j + 1}</td>`;
+                } else if (day > daysInMonth) {
+                    html += `<td class='p-2 border text-gray-400'>${nextMonthDay++}</td>`;
+                } else {
+                    let highlight = (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) ? 'bg-purple-100 font-bold' : '';
+                    html += `<td class='p-2 border ${highlight} cursor-pointer hover:bg-purple-200' data-date='${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}'>${day++}</td>`;
+                }
+            }
+            html += `</tr>`;
+            if (day > daysInMonth && nextMonthDay > 7) break;
+        }
+        html += `</tbody>`;
+        document.getElementById("calendarTable").innerHTML = html;
+        // Añadir evento click a los días válidos
+        document.querySelectorAll('#calendarTable td[data-date]').forEach(td => {
+            td.addEventListener('click', function () {
+                const date = this.getAttribute('data-date');
+                window.location.href = `/reservation/?date=${date}`;
+            });
+        });
+    }
+
+    document.getElementById("prevMonth").onclick = function () {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderCalendar(currentMonth, currentYear);
+    };
+    document.getElementById("nextMonth").onclick = function () {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar(currentMonth, currentYear);
+    };
+
+    window.addEventListener('DOMContentLoaded', function () {
+        renderCalendar(currentMonth, currentYear);
+    });
+</script>

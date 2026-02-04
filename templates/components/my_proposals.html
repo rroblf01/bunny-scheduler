@@ -1,7 +1,4 @@
-{% extends "base.html" %}
-{% block title %}Mis Reservas | Bunny Scheduler{% endblock %}
-{% block content %}
-<div class="max-w-2xl mx-auto bg-white p-8 rounded shadow mt-8">
+<div class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
     <h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Mis Reservas</h2>
     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 mb-6">
         <div class="mb-2 md:mb-0">
@@ -13,7 +10,7 @@
             <input type="date" id="filter-date-to" class="form-input border rounded px-2 py-1" />
         </div>
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto max-h-80 overflow-y-auto">
         <table class="min-w-full border border-gray-200" id="reservations-table">
             <thead>
                 <tr>
@@ -39,7 +36,6 @@
             </tbody>
         </table>
     </div>
-    <a href="/" class="block text-center mt-4 text-purple-600 hover:underline">Volver al calendario</a>
 </div>
 <script>
     const fromInput = document.getElementById('filter-date-from');
@@ -60,4 +56,3 @@
     fromInput.addEventListener('change', filterRows);
     toInput.addEventListener('change', filterRows);
 </script>
-{% endblock %}

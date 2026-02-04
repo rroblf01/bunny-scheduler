@@ -20,6 +20,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
             .select_related("reservation")
             .order_by("-id")
         )
+        context["reservations"] = Reservation.objects.filter(user=self.request.user)
         return context
 
 
@@ -95,16 +96,6 @@ class ReservationView(LoginRequiredMixin, FormView):
         form.save()
         messages.success(self.request, "Reserva realizada correctamente.")
         return redirect("home")
-
-
-class ReservationsView(LoginRequiredMixin, TemplateView):
-    template_name = "reservations.html"
-    login_url = "login"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["reservations"] = Reservation.objects.filter(user=self.request.user)
-        return context
 
 
 class ProposalView(LoginRequiredMixin, View):
