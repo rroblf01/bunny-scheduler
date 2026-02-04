@@ -11,7 +11,7 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
     <nav class="bg-white shadow p-4 mb-2">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-xl font-bold text-purple-700">Bunny Scheduler</a>
+            <a href="/" class="text-xl font-bold text-blue-700">Bunny Scheduler</a>
             {% if user.is_authenticated %}
             <span class="text-gray-700">¡Hola {{ user.username }}!</span>
             <form action="/logout/" method="post" class="ml-4">

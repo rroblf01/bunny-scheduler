@@ -22,7 +22,12 @@ class HomeView(LoginRequiredMixin, TemplateView):
             .select_related("reservation")
             .order_by("-id")
         )
-        context["reservations"] = Reservation.objects.filter(user=self.request.user)
+        reservations = Reservation.objects.filter(user=self.request.user)
+        context["reservations"] = reservations
+
+        context["reserved_dates"] = json.dumps(
+            [r.start_time.strftime("%Y-%m-%d") for r in reservations]
+        )
         return context
 
 
@@ -65,10 +70,10 @@ class ReservationView(LoginRequiredMixin, FormView):
 
         date_val = self.request.GET.get("date")
         if date_val:
-            reservas = Reservation.objects.filter(start_time__date=date_val).order_by(
-                "start_time"
-            )
-            context["reserved_hours"] = reservas
+            reservations = Reservation.objects.filter(
+                start_time__date=date_val
+            ).order_by("start_time")
+            context["reserved_hours"] = reservations
         else:
             context["reserved_hours"] = []
         return context
@@ -145,10 +150,8 @@ class ProposalView(LoginRequiredMixin, View):
 
         proposal.status = new_status
         proposal.save()
-        print(proposal.status)
 
         if new_status == "accepted":
-            print("updating reservation user")
             reservation = proposal.reservation
             reservation.user = proposal.proponent
             reservation.save()

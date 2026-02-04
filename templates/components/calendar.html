@@ -1,4 +1,4 @@
-<h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Calendario</h2>
+<h2 class="text-2xl font-bold mb-6 text-center text-blue-700">Calendario</h2>
 <div class="flex justify-between items-center mb-4">
     <button id="prevMonth" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">&#8592;</button>
     <span id="calendarTitle" class="text-lg font-semibold"></span>
@@ -13,6 +13,7 @@
     let today = new Date();
     let currentMonth = today.getMonth();
     let currentYear = today.getFullYear();
+    const reservedDates = new Set(JSON.parse(`{{ reserved_dates|safe }}`));
 
     function renderCalendar(month, year) {
         const calendarTitle = document.getElementById("calendarTitle");
@@ -41,7 +42,9 @@
                     html += `<td class='p-2 border text-gray-400'>${nextMonthDay++}</td>`;
                 } else {
                     let highlight = (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) ? 'bg-purple-100 font-bold' : '';
-                    html += `<td class='p-2 border ${highlight} cursor-pointer hover:bg-purple-200' data-date='${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}'>${day++}</td>`;
+                    let dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    let reservedClass = reservedDates.has(dateStr) ? 'border-b-4 border-blue-500' : '';
+                    html += `<td class='p-2 border ${highlight} ${reservedClass} cursor-pointer hover:bg-purple-200' data-date='${dateStr}'>${day++}</td>`;
                 }
             }
             html += `</tr>`;

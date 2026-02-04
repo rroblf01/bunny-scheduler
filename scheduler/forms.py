@@ -18,6 +18,16 @@ class ReservationForm(forms.ModelForm):
         widget=forms.TimeInput(attrs={"type": "time", "class": "form-input"}),
     )
 
+    def clean(self):
+        cleaned_data = super().clean()
+        start_hour = cleaned_data.get("start_hour")
+        end_hour = cleaned_data.get("end_hour")
+        if start_hour and end_hour and end_hour <= start_hour:
+            self.add_error(
+                "end_hour", "La hora de fin debe ser posterior a la hora de inicio."
+            )
+        return cleaned_data
+
     class Meta:
         model = Reservation
         fields = ["date", "start_hour", "end_hour", "description"]

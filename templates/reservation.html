@@ -5,7 +5,7 @@
 {% block content %}
 <div class="flex flex-col md:flex-row gap-8 justify-center mt-8">
     <div class="md:w-2/3 bg-white p-8 rounded shadow mx-auto">
-        <h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Reservar día</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">Reservar día</h2>
         {% if messages %}
         <ul class="mb-4">
             {% for message in messages %}
@@ -17,18 +17,18 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit"
-                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded">Reservar</button>
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Reservar</button>
         </form>
-        <a href="/" class="block text-center mt-4 text-purple-600 hover:underline">Volver al calendario</a>
+        <a href="/" class="block text-center mt-4 text-blue-600 hover:underline">Volver al calendario</a>
     </div>
     <div class="md:w-1/3 bg-gray-50 p-6 rounded shadow h-fit">
-        <h3 class="text-lg font-semibold mb-4 text-purple-700">Horas reservadas</h3>
+        <h3 class="text-lg font-semibold mb-4 text-blue-700">Horas reservadas</h3>
         {% if reserved_hours %}
         <ul class="space-y-2">
             {% for r in reserved_hours %}
-            <li class="bg-purple-100 text-purple-800 rounded px-3 py-1 text-sm">
+            <li class="bg-blue-100 text-blue-800 rounded px-3 py-1 text-sm">
                 {{ r.start_time|time:"H:i" }} - {{ r.end_time|time:"H:i" }}
-                <span class="block text-gray-500">{{ r.description }}</span>
+                <span class="block text-gray-500">{{ r.user.username }} - {{ r.description }}</span>
                 {% if r.user != request.user %}
                 {% with user_proposal=r.proposal_set.all|get_user_proposal:request.user %}
                 {% if not user_proposal %}
