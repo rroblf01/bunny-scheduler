@@ -1,4 +1,4 @@
-from .models import Proposal, Reservation
+from .models import Reservation
 from django import forms
 
 
@@ -23,13 +23,4 @@ class ReservationForm(forms.ModelForm):
         fields = ["date", "start_hour", "end_hour", "description"]
         widgets = {
             "description": forms.TextInput(attrs={"class": "form-input"}),
-        }
-
-
-class ProposalForm(forms.ModelForm):
-    class Meta:
-        model = Proposal
-        fields = ["reservation", "motivation", "status"]
-        widgets = {
-            "status": forms.Select(choices=Proposal.STATUS),
         }

@@ -1,10 +1,12 @@
+import json
+from django.http import JsonResponse
 from django.views import View
 from django.views.generic import TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login
 from django.shortcuts import redirect
-from .forms import ReservationForm, ProposalForm
+from .forms import ReservationForm
 from .models import Reservation, Proposal
 from django.contrib import messages
 
@@ -124,9 +126,6 @@ class ProposalView(LoginRequiredMixin, View):
         return redirect(request.META.get("HTTP_REFERER", "/"))
 
     def patch(self, request, *args, **kwargs):
-        import json
-        from django.http import JsonResponse
-
         try:
             data = json.loads(request.body)
             proposal_id = data.get("proposal_id")
