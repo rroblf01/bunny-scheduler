@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import logging
 from urllib.parse import urlparse, parse_qsl
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,7 +88,7 @@ if DEBUG:
         }
     }
 else:
-    tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+    tmpPostgres = urlparse(os.getenv("INTEGRATE_DATABASE_URL"))
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
